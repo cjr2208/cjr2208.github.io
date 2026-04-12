@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Bouncy Bouncy Ball</title>
+</head>
+<body>
+
+  <h2>🎾 GO MARBLESSS 🎾 </h2>
+
+  <label for="height">How high we dropping (in meters i guess):</label>
+  <input type="range" id="height" min="0.2" max="2" step="0.1" value="1">
+  <span id="heightValue">1</span>
+
+  <br><br>
+
+  <button id="playBtn">DROP THAT THANG</button>
+
+  <script src="bouncing.js"></script>
+
+  <h2>me blog</h2>
+  <p>From farnell, I wanted to create the bouncing ball sound. I basically just followed the full implementation they layed
+    out, but it kinda sounded like glass originally which I didnt mind, but I wanted it to be more goofy. I tried to 
+  change the frequencies and sine type but it just didn't sound how I liked and I kinda loved the glass ish sound. </p> 
+    <p>So I went with the glass sound and changed the frequencies to be higher and sweep across a slightly larger range, 
+    then changed osc to square which makes it sound more like glass marble on like ceramic or something, then I added an echo with a lpf to spice it up :)))
+    </p>
+    <p>In terms of what types of synthesis I used, since I used an envelope on the bounce sound over time I guess that's technically
+      subtractive synthesis, and since I changed the frequency as it swept that's FM. These work together well to create the marble sound
+      because both of them interact to simulate the way gravity works on a marble and how the frequency is gonna be higher initially on the first contact
+      with the ground, then go down as it starts to have potential energy from its max height going down etc etc. 
+      The envelope also simulates the way a marble would slowly come to a stop and how the force it hits the ground with goes down over time. 
+    </p>
+  <h2>Audio Signal Flow Chart</h2>
+  <img src="flow.jpg" alt="flow_chart" width="300">
+
+</body>
+</html>

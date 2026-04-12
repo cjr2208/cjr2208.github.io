@@ -5,7 +5,15 @@
 </head>
 <body>
 
+  <h2> SUPAAAA COLLIDER </h2>
+  <p> before my fun sound you can hear the coded “babbling brook”: {RHPF.ar(LPF.ar(BrownNoise.ar(), 400), LPF.ar(BrownNoise.ar(), 14) * 400 + 500, 0.03, 0.1)}.play 
+    Basically, the way I saw this code is you have some brown noise which you gave us the code for is going through a LPF with a cut off of 400hz.
+    Then that sound goes through a RHPF and the cut off fluctuates with the brown noise signal passed through lpf with a cut off of 14hz which has also been
+    scaled and moved by the multiplication by 400 and addition of 500. Finally the RHPF has a rq of 0.03 and needs to be multiplied by 0.1 </p>
+    <button id="brookBtn">Play bubblessss</button>
+
   <h2>🎾 GO MARBLESSS 🎾 </h2>
+
 
   <label for="height">How high we dropping (in meters i guess):</label>
   <input type="range" id="height" min="0.2" max="2" step="0.1" value="1">

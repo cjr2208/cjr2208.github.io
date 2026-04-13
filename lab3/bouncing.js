@@ -105,6 +105,7 @@ function playBounceBall(heightScale = 1) {
 let brookStarted = false;
 let brookNodes = null;
 
+
 //brown noise code from prof but changed to use let so it's easier to change values in future 
 function brownNoise(audioCtx) {
   const bufferSize = 10 * audioCtx.sampleRate;
@@ -129,20 +130,25 @@ function brownNoise(audioCtx) {
 
 function startBrook() {
   // LPF.ar(BrownNoise.ar(), 400)
-  const mainNoise = brownNoise(audioCtx);
-  const mainLPF = audioCtx.createBiquadFilter();
-  mainLPF.type = "lowpass";
-  mainLPF.frequency.value = 400;
+  const firstBrown = brownNoise(audioCtx);
+  const firstLPF = audioCtx.createBiquadFilter();
+  firstLPF.type = "lowpass";
+  firstLPF.frequency.value = 400;
 
-  // RHPF approximation
-  const highpass = audioCtx.createBiquadFilter();
-  highpass.type = "highpass";
-  highpass.Q.value = 1 / 0.03; // sorry i used chatgpt for this i hope thats okay but i was trying to use 0.03 and it wasn't working it said to do this because web audio uses Q value 
+  // RHPF.ar(first brown noise, second brown noise, 0.03, 0.1)
+  const hp = audioCtx.createBiquadFilter();
+  hp.type = "highpass";
+  hp.Q.value = 1 / 0.03; // sorry i used chatgpt for this i hope thats okay but i was trying to use 0.03 and it wasn't working it said to do this because web audio uses Q value 
   const outputGain = audioCtx.createGain();
   outputGain.gain.value = 0.1; //multiply
 
-  // PF.ar(BrownNoise.ar(), 14) * 400 + 500
-  const bn = brownNoise(audioCtx);
+  firstBrown.connect(firstLPF);
+  firstLPF.connect(hp);
+  hp.connect(outputGain);
+  outputGain.connect(audioCtx.destination);
+
+  // BrownNoise.ar(), 14) * 400 + 500
+  const secondBrown = brownNoise(audioCtx);
   const otherLPF = audioCtx.createBiquadFilter();
   otherLPF.type = "lowpass";
   otherLPF.frequency.value = 14;
@@ -151,43 +157,34 @@ function startBrook() {
   const offset = audioCtx.createConstantSource();
   offset.offset.value = 500;
 
-  
-  mainNoise.connect(mainLPF);
-  mainLPF.connect(highpass);
-  highpass.connect(outputGain);
-  outputGain.connect(audioCtx.destination);
-
-  bn.connect(otherLPF);
+  secondBrown.connect(otherLPF);
   otherLPF.connect(bnScale);
-  bnScale.connect(highpass.frequency);
-  offset.connect(highpass.frequency);
+  bnScale.connect(hp.frequency);
+  offset.connect(hp.frequency);
 
-  // start sound 
-  mainNoise.start();
-  bn.start();
+  // start her up
+  firstBrown.start();
+  secondBrown.start();
   offset.start();
 
   brookNodes = {
-    mainNoise,
-    bn,
+    firstBrown,
+    secondBrown,
     offset,
     outputGain
   };
 }
-
+// stop everything for when user hits button again 
 function stopBrook() {
   if (!brookNodes) return;
 
-  const now = audioCtx.currentTime;
-
-  brookNodes.outputGain.gain.cancelScheduledValues(now);
-  brookNodes.outputGain.gain.setValueAtTime(brookNodes.outputGain.gain.value, now);
-  brookNodes.outputGain.gain.exponentialRampToValueAtTime(0.0001, now + 0.3);
-
-  brookNodes.mainNoise.stop(now + 0.35);
-  brookNodes.bn.stop(now + 0.35);
-  brookNodes.offset.stop(now + 0.35);
-
+  const time = audioCtx.currentTime;
+  brookNodes.outputGain.gain.cancelScheduledValues(time);
+  brookNodes.outputGain.gain.setValueAtTime(brookNodes.outputGain.gain.value, time);
+  brookNodes.outputGain.gain.exponentialRampToValueAtTime(0.0001, time + 0.2);
+  brookNodes.firstBrown.stop(time + 0.25);
+  brookNodes.secondBrown.stop(time + 0.25);
+  brookNodes.offset.stop(time + 0.25);
   brookNodes = null;
 }
 
@@ -195,7 +192,6 @@ brookBtn.addEventListener("click", async () => {
   if (audioCtx.state === "suspended") {
     await audioCtx.resume();
   }
-
   if (!brookStarted) {
     startBrook();
     brookStarted = true;
@@ -206,4 +202,6 @@ brookBtn.addEventListener("click", async () => {
     brookBtn.textContent = "Play bubblessss";
   }
 });
+
+
 

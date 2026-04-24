@@ -58,9 +58,7 @@ function ensureAudio() {
   return Promise.resolve();
 }
 
-
 function cellFrequency(row, col) {
-  
   return notes[row][col];
 }
 
@@ -71,18 +69,13 @@ function startCellSound(row, col) {
   let now = audioCtx.currentTime;
   let osc = audioCtx.createOscillator();
   let gain = audioCtx.createGain();
-
   osc.type = 'triangle';
   osc.frequency.setValueAtTime(cellFrequency(row, col), now);
-
   gain.gain.setValueAtTime(0.0001, now);
   gain.gain.exponentialRampToValueAtTime(0.08, now + 0.05);
-
   osc.connect(gain);
   gain.connect(masterGain);
-
   osc.start(now);
-
   cellSounds[row][col] = {
     osc: osc,
     gain: gain
@@ -92,13 +85,10 @@ function startCellSound(row, col) {
 function stopCellSound(row, col) {
   let sound = cellSounds[row][col];
   if (!sound) return;
-
   let now = audioCtx.currentTime;
-
   sound.gain.gain.cancelScheduledValues(now);
   sound.gain.gain.setValueAtTime(sound.gain.gain.value, now);
   sound.gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.05);
-
   sound.osc.stop(now + 0.06);
   cellSounds[row][col] = null;
 }
@@ -120,10 +110,8 @@ function neighbors(row, col) {
   for (let dr = -1; dr <= 1; dr++) {
     for (let dc = -1; dc <= 1; dc++) {
       if (dr === 0 && dc === 0) continue;
-
       let r2 = row + dr;
       let c2 = col + dc;
-
       if (r2 >= 0 && r2 < SIZE && c2 >= 0 && c2 < SIZE) {
         if (grid[r2][c2]) count++;
       }
@@ -145,7 +133,6 @@ function nextGen() {
     }
   }
   grid = next;
-  generation++;
   updateAll();
 }
 
@@ -199,24 +186,19 @@ function buildGrid() {
       td.id = 'cell-' + r + '-' + c;
       td.width = 140;
       td.height = 75;
-
       let img = document.createElement('img');
       img.src = 'dead.png';
       img.width = 140;
       img.height = 75;
       img.style.objectFit = 'cover';
-
       td.appendChild(img);
-
       td.addEventListener('click', function () {
         toggleCell(r, c);
       });
-
       tr.appendChild(td);
       rowImages.push(img);
       rowSounds.push(null);
     }
-
     gridTable.appendChild(tr);
     cellImages.push(rowImages);
     cellSounds.push(rowSounds);
@@ -246,7 +228,6 @@ clearBtn.onclick = function () {
   running = false;
   clearInterval(timer);
   grid = createEmptyGrid();
-  generation = 0;
   updateAll();
 };
 
@@ -260,7 +241,6 @@ randomBtn.onclick = function () {
     }
   }
 
-  generation = 0;
   updateAll();
 };
 
@@ -270,7 +250,10 @@ soundTimer = setInterval(function () {
   }
 }, 1500);
 
+
+
 buildGrid();
 updateAll();
+
 
 

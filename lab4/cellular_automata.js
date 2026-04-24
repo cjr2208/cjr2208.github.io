@@ -58,7 +58,7 @@ function ensureAudio() {
 }
 
 function getVideoPath(row, col) {
-  let num = row * SIZE + col + 1;
+  let num = Math.floor(Math.random() * 6) + 1;
   return 'videos/' + num + '.mov';
 }
 

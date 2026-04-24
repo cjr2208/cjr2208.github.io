@@ -1,4 +1,4 @@
-const SIZE = 5;
+const SIZE = 10;
 
 const startBtn = document.getElementById('start');
 const pauseBtn = document.getElementById('pause');

@@ -59,7 +59,7 @@ function ensureAudio() {
 
 function getVideoPath(row, col) {
   let num = Math.floor(Math.random() * 6) + 1;
-  return 'videos/ ' + num + '.mov';
+  return 'videos/' + num + '.mov';
 }
 
 function cellFrequency(row, col) {

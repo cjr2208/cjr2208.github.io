@@ -13,8 +13,9 @@ let soundTimer = null;
 
 let audioCtx = null;
 let masterGain = null;
-let cellVideos = [];
+let cellImages = [];
 let cellSounds = [];
+
 // got notes from this website: https://mixbutton.com/music-tools/frequency-and-pitch/music-note-to-frequency-chart
 // had to rearrange because theirs is 12x8 since 8 octavies and 12 notes, ended up just randomizing the order using chatgpt
 let notes = [
@@ -57,10 +58,6 @@ function ensureAudio() {
   return Promise.resolve();
 }
 
-function getVideoPath(row, col) {
-  let num = Math.floor(Math.random() * 6) + 1;
-  return 'videos/' + num + '.mov';
-}
 
 function cellFrequency(row, col) {
   
@@ -152,17 +149,14 @@ function nextGen() {
   updateAll();
 }
 
-function updateVideos() {
+function updateImg() {
   for (let r = 0; r < SIZE; r++) {
     for (let c = 0; c < SIZE; c++) {
-      let v = cellVideos[r][c];
-      if (!v) continue;
-
+      let img = cellImages[r][c];
       if (grid[r][c]) {
-        let p = v.play();
-        if (p && p.catch) p.catch(() => {});
+        img.src = 'alive.png';
       } else {
-        v.pause();
+        img.src = 'dead.png';
       }
     }
   }
@@ -179,29 +173,25 @@ function updateColors() {
 
 function updateAll() {
   updateColors();
-  updateVideos();
+  updateImg()
   updateSounds();
 }
 
 function toggleCell(r, c) {
-  grid[r][c] = !grid[r][c];
-  updateAll();
-
   ensureAudio().then(function () {
-    if (grid[r][c]) {
-      playNote(r, c);
-    }
+    grid[r][c] = !grid[r][c];
+    updateAll();
   });
 }
 
 function buildGrid() {
-  cellVideos = [];
+  cellImages = [];
   cellSounds = [];
   gridTable.innerHTML = '';
 
   for (let r = 0; r < SIZE; r++) {
     let tr = document.createElement('tr');
-    let rowVideos = [];
+    let rowImages = [];
     let rowSounds = [];
 
     for (let c = 0; c < SIZE; c++) {
@@ -210,28 +200,25 @@ function buildGrid() {
       td.width = 140;
       td.height = 75;
 
-      let video = document.createElement('video');
-      video.src = getVideoPath(r, c);
-      video.width = 140;
-      video.height = 75;
-      video.muted = true;
-      video.loop = true;
-      video.playsInline = true;
-      video.style.objectFit = 'cover';
+      let img = document.createElement('img');
+      img.src = 'dead.png';
+      img.width = 140;
+      img.height = 75;
+      img.style.objectFit = 'cover';
 
-      td.appendChild(video);
+      td.appendChild(img);
 
       td.addEventListener('click', function () {
         toggleCell(r, c);
       });
 
       tr.appendChild(td);
-      rowVideos.push(video);
+      rowImages.push(img);
       rowSounds.push(null);
     }
 
     gridTable.appendChild(tr);
-    cellVideos.push(rowVideos);
+    cellImages.push(rowImages);
     cellSounds.push(rowSounds);
   }
 }
@@ -283,8 +270,7 @@ soundTimer = setInterval(function () {
   }
 }, 1500);
 
-
-
 buildGrid();
 updateAll();
+
 

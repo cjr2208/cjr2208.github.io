@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Final Project Blog -- Resnick</title>
+</head>
+<body>
+    <h1>Talk like Rocky Blog</h1>
+    <p>
+        This was by far my favorite project to code for! As I said in my initial proposal,
+         I just finished the novel Project Hail Mary, and Rocky, an alien from the planet Erid, is by far my favorite character. 
+        In the novel he speaks with music; each word is a collection of notes and they vary in octave depending on his mood. 
+        Thus, inspired by Rocky, I built this interactive browser-based system that translates whatever you say into an Rocky’s language!
+    </p>
+    <p>
+        Initially, I wanted to use an LLM to do the sentiment analysis, but the nlp.js library was so helpful and it was so much easier to use then I expected. 
+        I loved that I could input my own words to customize the topics/moods and expand the subsets of words as I went.
+        I am currently taking a class on LLMs so the concept of sentiment analysis has become more familiar to me and it was super cool to try and implement it myself 
+        rather than just use an LLM and API to do it for me. 
+    </p>
+    <p>
+        For the actual translation process, I started by ignoring the sentiment and just making chords/combinations of frequencies based on individual word length and sentence structure. 
+        I wanted each word to vary significantly in sound so I had to use a number of different characteristics to decide the pattern of frequencies. At first, 
+        I just used did the number of letters in the word to decide how many notes and what scale to put them in, but this made words like love and hate have the same sound, 
+        which isn’t bad because in the novel there’s actually a moment where Rocky says yes and no and the main character Grace remarks that they have the same chord, 
+        but I felt like my professor (you, if you’re reading this) would think I didn’t put in enough effort if he noticed this pattern. Thus, I chose to use the number of letters in the word, 
+        number of words in the sentence, mood, and the specific letters in the word to decide the number of frequencies, their scale, and the amount of times they are played for a particular word. 
+        Additionally, I wanted to play each chord a different number of times for each word, and I found that doing it by word length was the best way to do it.
+    </p>
+    <p>
+        After deciding the chords, I moved on to sentiment analysis. I used the nlp.js library to figure out how to extract words and decide mood. 
+        From there I decided that, like the novel, if the mood is positive, the whole sentence will be a higher octave and will go through a high pass filter of 2000; 
+        if the mood is negative, the whole sentence will be a lower octave and will go through a low pass filter of 600; if it’s neutral, no additional filters and will stay in normal octave. 
+        Then for topic, I decided that different topics of conversation would be represented by different oscillator types, so if the sentence is about math or science, the osc would be sawtooth, 
+        if the user is talking about themselves it would be square (talking about yourself overwrites any other topic, so even if they say I love coding which includes science, the whole sentence will be 
+        square cause they are talking about themselves), if the user is talking about nature it would be triangle, anything else will be sine. 
+    </p>
+    <p>
+        Finally, if the sentence ends in an exclamation mark, it will go through AM with a modulator of 800, and if it ends with a question mark, 
+        it will go through FM with a modulator of 125, and index of modulation will be 750.
+    </p>
+    <p>
+        Hopefully all of this makes sense, but if it doesn’t I made a little table with all the info below. I had so much fun creating 
+        this and genuinely this was my favorite class of the entire semester. I am not a CS major, not super musically intelligent, 
+        but this class taught me so much and I appreciate how much you pushed us to think creatively rather than just rewarding our coding abilities. 
+        Thank you for a great semester! Take care.
+    </p>
+    <br></br>
+    <table border="1" style="width:40%" >
+        <tr>
+            <td>Number of frequencies</td>
+            <td>blah</td>
+        </tr>
+        <tr>
+            <td>Times Played</td>
+            <td> blah</td>
+        </tr>
+    </table>
+</body>
+</html>

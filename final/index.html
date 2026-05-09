@@ -3,22 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <title>Final Project -- Resnick</title>
+  <style>
+    body {
+      background-image: url("images/rocky.jpg");
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center; 
+      flex-direction: column;
+    }
+    h1 {
+      color: rgb(255, 255, 255);
+      font-size: 80px;
+      margin-bottom: 30px;
+    }
+    h2 {
+      color: rgb(15, 254, 51);
+      font-size: 50px;
+      margin-top: 20px;
+      margin-bottom: 5px;
+    }
+    h3 {
+      color: rgb(255, 247, 9);
+      font-size: 20px;
+      margin-top: 3px;
+      margin-bottom: 50px;
+    }
+    p {
+      color: rgb(251, 255, 22);
+      font-size: 30px;
+      margin-top: 2px;
+      margin-bottom: 2px;
+    }
+
+  </style>
 </head>
+
 <body>
   <h1>Talk like Rocky!!</h1>
-
   <p>
-    blah blah
+    Translate any sentence or word
   </p>
-
+  <p>into Rocky speak (Eridian)!</p>
+  <h2>Translate Below!</h2>
+  <pre id="analysisDisplay"></pre>
+  <h3>(notice how i finally learned to use css)</h3>
   <form action="https://cjr2208.github.io/final/blog">
     <input type="submit" value="Go to Rocky blog page!"/>
   </form>
 
-  <button id="playBtn">Play Translation</button>
-
-  <h2>Translation</h2>
-  <pre id="analysisDisplay"></pre>
+  <form id="translateForm">
+  <input
+    type="text"
+    id="userInput"
+    placeholder="Type something to be translated..."
+    required>
+  <button type="submit">Play Translation!</button>
+  </form>
 
   <script src="rocky.js"></script>
 </body>

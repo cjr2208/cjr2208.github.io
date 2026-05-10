@@ -9,6 +9,7 @@
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
+      font-family: 'Courier New', Courier, monospace;
       height: 100vh;
       margin: 0;
       display: flex;
@@ -39,6 +40,12 @@
       margin-top: 2px;
       margin-bottom: 2px;
     }
+    button{
+      width: 200px; 
+      font-size: 20px; 
+      padding: 10px;
+      color: rgb(68, 0, 255);
+    }
 
   </style>
 </head>
@@ -50,18 +57,19 @@
   </p>
   <p>into Rocky speak (Eridian)!</p>
   <h2>Translate Below!</h2>
-  <pre id="analysisDisplay"></pre>
-  <h3>(notice how i finally learned to use css)</h3>
+
+  <h3>(notice how i finally learned to use css sort of)</h3>
   <form action="https://cjr2208.github.io/final/blog">
     <input type="submit" value="Go to Rocky blog page!"/>
   </form>
 
-  <form id="translateForm">
-  <input
-    type="text"
-    id="userInput"
-    placeholder="Type something to be translated..."
-    required>
+  <form id="translateForm" style="text-align: center; margin-top: 50px;">
+  <textarea
+  id="userInput"
+  placeholder="Type something to be translated..."
+  rows="4"
+  style="width: 500px; font-size: 20px; padding: 10px;"></textarea>
+  <br></br>
   <button type="submit">Play Translation!</button>
   </form>
 

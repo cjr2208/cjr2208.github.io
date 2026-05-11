@@ -4,10 +4,9 @@
 * Rocky talkie!!!
 */
 
-
-// WORDS AND LETTERS
+// WORDS LETTERS
 const SELF_WORDS = new Set(['i','me','my','mine','myself',"i'm","i've","i'll","i'd","we","we'd","us","ours","we've","we'll","we're"]);
-//science
+//science (i used chatgpt to come up with words and then added my own)
 const SCIENCE_WORDS = new Set([
   'math','science','physics','chemistry','biology','astronomy','algebra',
   'calculus','equation','formula','theory','hypothesis','experiment',
@@ -30,7 +29,7 @@ const NATURE_WORDS = new Set([
   'autumn','winter','summer','garden','meadow','stream','waterfall',
   'canyon','cave','shore','tide','wave','breeze','fog','mist', 'nature', 'stars','star'
 ]);
-// mood words from nlp.js afin
+// mood words from nlp.js afin lexicon 
 const AFINN = {
   good:3,great:3,love:3,excellent:4,wonderful:4,awesome:4,happy:3,joy:3,
   beautiful:3,fantastic:4,amazing:4,nice:2,like:2,enjoy:2,fun:2,glad:2,
@@ -46,7 +45,8 @@ const AFINN = {
   annoying:-2,irritating:-2,upset:-2,bitter:-2,gloomy:-2,lonely:-2,
   no:-1,not:-1,never:-1,nothing:-2,nobody:-1,nowhere:-1, failure:-3, die:-3, help:-2
 };
-//number maps
+
+//NUMBERS
 const DIGIT_WORDS = ['zero','one','two','three','four','five','six','seven','eight','nine'];
 const ORDINALS = {
   '1st':'first','2nd':'second','3rd':'third','4th':'fourth',
@@ -60,7 +60,6 @@ const MODES = {
   neutral:  [0, 2, 3, 5, 7, 9, 10],  
   negative: [0, 1, 3, 5, 7, 8, 10],
 };
-
 //number mapping with decimals and signs
 function digitsToWords(numStr) {
   let prefix = '';
@@ -72,15 +71,13 @@ function digitsToWords(numStr) {
   const decPart = parts[1].split('').map(d => DIGIT_WORDS[+d] ?? d).join(' ');
   return (prefix + intPart + ' point ' + decPart).trim();
 }
-
-//i used chatgpt for this i hope that's okay, i did not know how to do the replace stuff
+//i used chatgpt for this function i hope that's okay, i did not know how to do the replace stuff
 // but this function seperates the numbers so that the digits to words function can work 
 function expandNumbers(text) {
   text = text.replace(/\b(\d{1,2}(?:st|nd|rd|th))\b/gi, m => ORDINALS[m.toLowerCase()] ?? m);
   text = text.replace(/[+-]?\d+(?:\.\d+)?/g, m => digitsToWords(m));
   return text;
 }
-
 function letterVal(ch) {
   return ch.toLowerCase().charCodeAt(0) - 96; // a=1 … z=26
 }

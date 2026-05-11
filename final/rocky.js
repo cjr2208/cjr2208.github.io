@@ -29,13 +29,14 @@ const NATURE_WORDS = new Set([
   'autumn','winter','summer','garden','meadow','stream','waterfall',
   'canyon','cave','shore','tide','wave','breeze','fog','mist', 'nature', 'stars','star'
 ]);
-// mood words from nlp.js afin lexicon 
+// mood words from nlp.js afin lexicon plus some of my own related to he movie
 const AFINN = {
   good:3,great:3,love:3,excellent:4,wonderful:4,awesome:4,happy:3,joy:3,
   beautiful:3,fantastic:4,amazing:4,nice:2,like:2,enjoy:2,fun:2,glad:2,
   positive:2,best:3,brilliant:4,delight:3,superb:3,magnificent:4,
   perfect:3,pleased:2,thankful:2,grateful:3,incredible:4,outstanding:4,
   excited:3,thrilled:3,cheerful:3,radiant:3,euphoric:4,bliss:4,yes:1, amaze:4,
+  xenonite:3,
   //good ^ bad ->
   bad:-3,hate:-3,terrible:-3,awful:-4,horrible:-4,sad:-3,angry:-3,
   ugly:-2,poor:-2,dislike:-2,boring:-2,dull:-2,negative:-2,worst:-3,
@@ -43,11 +44,12 @@ const AFINN = {
   miserable:-4,depressing:-3,useless:-2,failure:-2,fail:-2,broken:-2,
   lost:-2,hurt:-2,pain:-2,cry:-2,disappoint:-2,frustrated:-2,
   annoying:-2,irritating:-2,upset:-2,bitter:-2,gloomy:-2,lonely:-2,
-  no:-1,not:-1,never:-1,nothing:-2,nobody:-1,nowhere:-1, failure:-3, die:-3, help:-2
+  no:-1,not:-1,never:-1,nothing:-2,nobody:-1,nowhere:-1, failure:-3, die:-3, help:-2,
+  astrophage:-3, petrova:-2
 };
 
 //NUMBERS
-const DIGIT_WORDS = ['zero','one','two','three','four','five','six','seven','eight','nine'];
+const NUM_WORDS = ['zero','one','two','three','four','five','six','seven','eight','nine'];
 const ORDINALS = {
   '1st':'first','2nd':'second','3rd':'third','4th':'fourth',
   '5th':'fifth','6th':'sixth','7th':'seventh','8th':'eighth',
@@ -56,19 +58,20 @@ const ORDINALS = {
 
 // STEPS (inspired by strudel :))
 const MODES = {
-  positive: [0, 2, 4, 6, 7, 9, 11],  
-  neutral:  [0, 2, 3, 5, 7, 9, 10],  
+  positive: [0, 2, 4, 6, 7, 9, 11],   
   negative: [0, 1, 3, 5, 7, 8, 10],
+  neutral:  [0, 2, 3, 5, 7, 9, 10], 
 };
-//number mapping with decimals and signs
+
+//number mapping with signs and decimals
 function digitsToWords(numStr) {
   let prefix = '';
   if (numStr.startsWith('-')) { prefix = 'negative '; numStr = numStr.slice(1); }
   else if (numStr.startsWith('+')) { numStr = numStr.slice(1); }
   const parts = numStr.split('.');
-  const intPart = parts[0].split('').map(d => DIGIT_WORDS[+d] ?? d).join(' ');
+  const intPart = parts[0].split('').map(d => NUM_WORDS[+d] ?? d).join(' ');
   if (parts.length === 1) return (prefix + intPart).trim();
-  const decPart = parts[1].split('').map(d => DIGIT_WORDS[+d] ?? d).join(' ');
+  const decPart = parts[1].split('').map(d => NUM_WORDS[+d] ?? d).join(' ');
   return (prefix + intPart + ' point ' + decPart).trim();
 }
 //i used chatgpt for this function i hope that's okay, i did not know how to do the replace stuff
@@ -164,11 +167,11 @@ let activeNodes = [];
 let isPlaying   = false;
 let animFrameId = null;
 
+//copy and pasted from last project HW 4
 function ensureAudio() {
   if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   if (audioCtx.state === 'suspended') audioCtx.resume();
 }
-
 function stopAll() {
   isPlaying = false;
   for (const n of activeNodes) { try { n.stop(); n.disconnect(); } catch(e) {} }
@@ -182,14 +185,14 @@ function handlePlay(rawInput) {
   stopAll();
   ensureAudio();
   isPlaying = true;
-  // if numbers expand
+  // if numbers, make into words
   const text = expandNumbers(rawInput.trim());
   //analyze everything
   const mood = analyzeSentiment(text);
   const topic = detectTopic(text);
   const endsExclaim  = text.trimEnd().endsWith('!');
   const endsQuestion = text.trimEnd().endsWith('?');
-  //osc
+  //osc for topic
   const oscTypeMap = { self:'square', science:'sawtooth', nature:'triangle', other:'sine' };
   const oscType = oscTypeMap[topic];
   // split into individual words
@@ -240,7 +243,7 @@ function handlePlay(rawInput) {
           lastNode.connect(lpf);
           lastNode = lpf;
         }
-        // AM
+        // AM kinda copy pasted this from lab 2 hope thats okay
         if (endsExclaim) {
           const amGain = audioCtx.createGain();
           amGain.gain.value = 1;
@@ -257,7 +260,7 @@ function handlePlay(rawInput) {
           amMod.stop(et + 0.05);
           activeNodes.push(amMod);
         }
-        // FM
+        // FM again kinda copy pasted this from lab 2 
         if (endsQuestion) {
           const fmMod = audioCtx.createOscillator();
           fmMod.type = 'sine';

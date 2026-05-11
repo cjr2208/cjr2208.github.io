@@ -17,7 +17,7 @@ const SCIENCE_WORDS = new Set([
   'neuron','electron','proton','neutron','space','orbit','planet',
   'galaxy','star','rocket','satellite','laser','radiation','nuclear',
   'plus','minus','equals','divide','multiply','sum','total','percent', 'centrifuge',
-  'Erid', 'Earth', 'Tau', 'Tau Ceti'
+  'Erid', 'Earth', 'Tau', 'Tau Ceti','astrophage', 'xenonite','taumoeba'
 ]);
 //nature
 const NATURE_WORDS = new Set([
@@ -36,7 +36,7 @@ const AFINN = {
   positive:2,best:3,brilliant:4,delight:3,superb:3,magnificent:4,
   perfect:3,pleased:2,thankful:2,grateful:3,incredible:4,outstanding:4,
   excited:3,thrilled:3,cheerful:3,radiant:3,euphoric:4,bliss:4,yes:1, amaze:4,
-  xenonite:3,
+  xenonite:3, Grace:3, //main character's name
   //good ^ bad ->
   bad:-3,hate:-3,terrible:-3,awful:-4,horrible:-4,sad:-3,angry:-3,
   ugly:-2,poor:-2,dislike:-2,boring:-2,dull:-2,negative:-2,worst:-3,
